@@ -21,11 +21,11 @@ end
 cd(outputdir);
 
 % Experiment settings
-%promptwords2use = {'
-expt.baselinevowels = {'EH', 'I', 'AH'};
+promptwords2use = {'bet', 'fit', 'meet', 'late','bad', 'hot', 'bought',
+'hope', 'book', 'pool'};
+expt.baselinevowels = {'?', 'I', 'i', 'e', 'æ', '?', '?', 'o', '?', 'u'};
 nreps = 3;
 expt.snum = subjID;
-expt.type = 'formant_baseline';
 expt.ntrials_per_block= length(promptwords2use);
 expt.nblocks = nreps;
 feedback_level = 0;
@@ -77,7 +77,7 @@ close(h_fig)
 fusp_lite_finish(ffdp);
 
 %Save parameters
-savedir = fullfile(outputdir, expt.snum, expt.type);
+savedir = fullfile(outputdir, expt.snum);
 exprparams = p.fusp_init;
 save(fullfile(savedir,'exprparams.mat'), '-struct', 'exprparams');
 save(fullfile(savedir, 'expt.mat'), 'expt');

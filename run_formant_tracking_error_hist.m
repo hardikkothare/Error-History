@@ -22,7 +22,6 @@ datadir = [outputdir '/' subjID '/formant_baseline/block' num2str(test_block-1)]
 cd(datadir);
 vh_inbuffer4fakeaudio = get_vec_hist6('inbuffer',3);
 cd(outputdir);
-expt.type = 'nlpc_test';
 
 for inlpc = 1:nnlpc
     hf(inlpc) = figure;

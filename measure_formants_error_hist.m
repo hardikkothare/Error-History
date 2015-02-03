@@ -1,4 +1,4 @@
-cd(fullfile(outputdir,expt.snum,expt.type));
+cd(fullfile(outputdir,expt.snum));
 load(p);
 
 fs = fusp_init.sample_rate;
@@ -56,7 +56,7 @@ end
 
 close all
 
-cd(fullfile(outputdir,expt.snum,expt.type));
+cd(fullfile(outputdir,expt.snum));
 load(exprparams);
 saystrings = expt.words;
-save(fullfile(outputdir,expt.snum,expt.type,sprintf('vowelspace_%s',expt.snum)),'vowelspace','saystrings');
+save(fullfile(outputdir,expt.snum,sprintf('vowelspace_%s',expt.snum)),'vowelspace','saystrings');

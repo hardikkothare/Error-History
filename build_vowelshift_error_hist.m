@@ -34,26 +34,20 @@ xlabel('F1 (hz)');
 ylabel('F2 (hz)');
 
 %Compute shifts
-allpairs = nchoosek(1:length(vowels),3);
-allperms = [allpairs; [allpairs(:,3) allpairs(:,2) allpairs(:,1)]];
+allpairs = nchoosek(1:length(vowels),2);
+allperms = [allpairs; [allpairs(:,2) allpairs(:,1)]];
 allperms = sortrows(allperms);
 
 for i=1:size(allperms,1)
     vowel1 = vowels{allperms(i,1)};
     vowel2 = vowels{allperms(i,2)};
-    vowel3 = vowels{allperms(i,3)};
     ehtoi = sprintf('%s2%s', vowel1, vowel2);
-    ehtoah = sprintf('%s2%s', vowel1, vowel3);
     shifts.(ehtoi) = FMean.(vowel2) - FMean.(vowel1);
-    shifts.(ehtoah) = FMean.(vowel3) - FMean.(vowel1);
-    
+      
     %Plot the shift from vowel1 to vowel2
     plot([Fmean.(vowel1)(1) Fmean.(vowel1)(1)+shifts.(ehtoi)(1)], ...
         [Fmean.(vowel1)(2) Fmean.(vowel1)(2)+shifts.(ehtoi)(2)],'--','Color',colors{allperms(i,1)})
     
-    %Plot the shift from vowel1 to vowel3
-    plot([Fmean.(vowel1)(1) Fmean.(vowel1)(1)+shifts.(ehtoah)(1)], ...
-        [Fmean.(vowel1)(2) Fmean.(vowel1)(2)+shifts.(ehtoah)(2)],'--','Color',colors{allperms(i,1)})
 end
 
 reply = input('looks good? [y]/n: ','s');
