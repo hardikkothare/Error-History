@@ -17,10 +17,11 @@ end
 expt.type = type;
 expt.snum = subjID;
  
-expt.words = {'Pet','Leg','Bed','Ten','Web'};
+load('vowelshift_params.mat');
+%expt.words = {};
 expt.vowels = {'EH','EH','EH','EH','EH'};
-expt.shift.F1 = [-370,240];
-expt.shift.F2 = [500,-290];
+%expt.shift.F1 = [-370,240];
+%expt.shift.F2 = [500,-290];
 
 % Load predetermined lpc
 if ~exist(fullfile(outputdir,expt.snum),'dir')
@@ -90,7 +91,7 @@ p_fusp_init.ntrials_per_block = expt.ntrials_per_block;
 [p,ffd] = init_fusp_lite(p);
 
 % Save initial FUSP params
-savefile = fullfile(outputdir,expr_dir,expr_subdir,'p.mat');
+savefile = fullfile(outputdir,expt.snum,expt.type,'p.mat');
 save(savefile,'p');
 
 % Experiment Code

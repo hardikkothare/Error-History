@@ -22,6 +22,7 @@ cd(outputdir);
 
 % Experiment settings
 %promptwords2use = {'
+expt.baselinevowels = {'EH', 'I', 'AH'};
 nreps = 3;
 expt.snum = subjID;
 expt.type = 'formant_baseline';
@@ -78,7 +79,8 @@ fusp_lite_finish(ffdp);
 %Save parameters
 savedir = fullfile(outputdir, expt.snum, expt.type);
 exprparams = p.fusp_init;
-save(fullfile(savedir,'exprparams.mat'), '-struct', 'exprparams')
+save(fullfile(savedir,'exprparams.mat'), '-struct', 'exprparams');
+save(fullfile(savedir, 'expt.mat'), 'expt');
       
 pause
 
