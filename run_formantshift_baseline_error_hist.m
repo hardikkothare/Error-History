@@ -23,7 +23,7 @@ cd(outputdir);
 % Experiment settings
 promptwords2use = {'bet', 'fit', 'meet', 'late','bad', 'hot', 'bought',
 'hope', 'book', 'pool'};
-expt.baselinevowels = {'?', 'I', 'i', 'e', 'æ', '?', '?', 'o', '?', 'u'};
+expt.baselinevowels = {'EH', 'I', 'i', 'e', 'ash', 'AH', 'open o', 'o', 'horseshoe u', 'u'};
 nreps = 3;
 expt.snum = subjID;
 expt.ntrials_per_block= length(promptwords2use);
