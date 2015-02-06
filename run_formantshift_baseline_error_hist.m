@@ -51,6 +51,10 @@ p.fusp_ctrl.noise_scale_fact = noise_level;
 %Start FUSP Lite
 [p,ffd] = init_fusp_lite(p);
 
+% Save initial FUSP params
+savefile = fullfile(outputdir,expt.snum,'p.mat');
+save(savefile,'p');
+
 %Experiment code
 h_fig = figure;
 axis off;
