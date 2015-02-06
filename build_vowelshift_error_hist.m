@@ -1,6 +1,6 @@
 function [] = build_vowelshift_error_hist()
 
-cd(fullfile(outputdir, expt.snum, expt.type));
+cd(fullfile(outputdir, expt.snum));
 load(exprparams);
 load(p);
 
@@ -55,5 +55,5 @@ if ~isempty(reply) && ~strcmp(reply,'y')
     error('Bad vowel formants');
 end
 
-savefile = fullfile(outputdir, expt.snum, expt.type, 'vowelshift_params.mat');
+savefile = fullfile(outputdir, expt.snum, 'vowelshift_params.mat');
 save(savefile,'shifts');    
