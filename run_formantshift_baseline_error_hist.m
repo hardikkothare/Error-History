@@ -3,7 +3,7 @@ function run_formantshift_baseline_error_hist(subjID, outputdir)
 if nargin < 2
     outputdir = '/home/houde/data/error_hist';
     if nargin < 1
-        subjID = input('Enter participant ID number: ');
+        subjID = input('Enter participant ID number:  ','s');
     end
 end
 if ~exist(fullfile(outputdir, subjID))
@@ -21,8 +21,7 @@ end
 cd(outputdir);
 
 % Experiment settings
-promptwords2use = {'bet', 'fit', 'meet', 'late','bad', 'hot', 'bought',
-'hope', 'book', 'pool'};
+promptwords2use = {'bet', 'fit', 'meet', 'late','bad', 'hot', 'bought','hope', 'book', 'pool'};
 expt.baselinevowels = {'EH', 'I', 'i', 'e', 'ash', 'AH', 'open o', 'o', 'horseshoe u', 'u'};
 nreps = 3;
 expt.snum = subjID;
@@ -39,7 +38,7 @@ p.fpreemph_cut_Hz = fpreemph_cut2use;
 
 %IP
 p.fusp_init.expr_dir = expt.snum;
-p.fusp_init.expr_subdir = expt.name;
+%p.fusp_init.expr_subdir = expt.name;
 p.fusp_init.nframes_per_trial = 600;
 p.fusp_init.ntrials_per_block = expt.ntrials_per_block;
 
@@ -61,9 +60,9 @@ axis off;
 
 for iblock=1:expt.nblocks
     fusp_advance_block(p,iblock);
-    if iblock == 1
-        write_filtcoffs(p);
-    end
+%     if iblock == 1
+%         write_filtcoffs(p);
+%     end
     
     for itrial = 1:expt.ntrials_per_block
         fusp_advance_trial(itrial);
