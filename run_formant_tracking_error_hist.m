@@ -6,6 +6,7 @@ cd(outputdir);
 
 %Experiment settings
 expt.snum = subjID;
+expt.name = 'baseline';
 expt.ntrials_per_block = length(promptwords2use);
 expt.nblocks = 3;
 feedback_level = 0;
@@ -18,7 +19,7 @@ test_fpreemph_cut = [1200 1500 1800 2100];
 npreemph = length(test_fpreemph_cut);
 
 %Set directory of audio files and nlpc test files
-datadir = [outputdir '/' subjID '/formant_baseline/block' num2str(test_block-1)];
+datadir = [outputdir '/' subjID '/baseline/block' num2str(test_block-1)];
 cd(datadir);
 vh_inbuffer4fakeaudio = get_vec_hist6('inbuffer',3);
 cd(outputdir);
@@ -33,7 +34,11 @@ for inlpc = 1:nnlpc
     %FUSP parameters
     p.fusp_datadir = outputdir;
     p.yes_running_fake_fusp = 1;
-    p.yes_debug = 0;
+    p.yes_debug = 1;
+    p.dir4fake_audio = datadir;
+    p.startdir = pwd;
+    p.ichan4inbuffer = 1;
+   % p.block0dir = [outputdir '/' subjID '/baseline/block0'];
     
     %IP
     p.fusp_init.expr_dir = expt.snum;
@@ -46,17 +51,19 @@ for inlpc = 1:nnlpc
     p.fusp_ctrl.outbuffer_scale_fact = feedback_level; 
     p.fusp_ctrl.noise_scale_fact = noise_level; 
     p.fusp_ctrl.process_inbuffer = 3;
-    p.dir4fake_audio = datadir;
-    p.startdir = pwd;
+    
     
     %Start FUSP
     [p,ffd] = init_fusp_lite(p);
     
+    
     %Experiment code
     for iblock = 1:npreemph 
-        fusp_advance_block(p,iblock);
+        iblock2load = fusp_advance_block(p,iblock);
+        p.block0dir = [outputdir '/' subjID '/' 'baseline' '/' iblock2load];
         p.fpreemph_cut_Hz = test_fpreemph_cut(iblock);
         write_filtcoffs(p);
+        
         
         for itrial = 1:expt.ntrials_per_block
             vechist2rawrec(fullfile(outputdir,'fake_audio_input'),vh_inbuffer4fakeaudio,itrial,p.ichan4inbuffer);

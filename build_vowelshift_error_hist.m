@@ -1,8 +1,22 @@
 function [] = build_vowelshift_error_hist()
 
+    if nargin<1
+        subjID=input('Enter participant ID number: ', 's');
+    end
+
+
+  outputdir = '/home/houde/data/error_hist';
+  if ~exist(outputdir,'dir')
+     mkdir(outputdir)
+  end
+
+% Set the fields for struct expt
+expt.snum = subjID;
+
 cd(fullfile(outputdir, expt.snum));
-load(exprparams);
-load(p);
+load('exprparams');
+%load('p');
+load('expt');
 
 %Load vowelspace file
 disp('Select subject vowelspace file ');
@@ -18,8 +32,8 @@ end
 
 %Get formants
 for v = 1:length(vowels)
-    FAll.(vowels{v}) = vowelspace(saystrings.(vowels{v}),:);
-    FMean. (vowels{v}) = nanmean(FAll.(vowels{v}));
+    FAll.(vowels{v}) = vowelspace(v,:);
+    %FMean. (vowels{v}) = nanmean(FAll.(vowels{v}));
 end
 
 %Plot vowels
@@ -27,8 +41,8 @@ figure('Position',[33 125 939 548]);
 for v = 1:length(vowels)
     plot(FAll.(vowels{v})(:,1),FAll.(vowels{v})(:,2),'.' ,'Color', colors{v});
     hold on;
-    plot(Fmean.(vowels{v})(:,1),Fmean.(vowels{v})(:,2),'*');
-    text(Fmean.(vowels{v})(:,1),Fmean.(vowels{v})(:,2),vowels{v});
+   % plot(FMean.(vowels{v})(:,1),FMean.(vowels{v})(:,2),'*');
+    text(FAll.(vowels{v})(:,1),FAll.(vowels{v})(:,2),vowels{v});
 end
 xlabel('F1 (hz)');
 ylabel('F2 (hz)');
@@ -42,11 +56,11 @@ for i=1:size(allperms,1)
     vowel1 = vowels{allperms(i,1)};
     vowel2 = vowels{allperms(i,2)};
     ehtoi = sprintf('%s2%s', vowel1, vowel2);
-    shifts.(ehtoi) = FMean.(vowel2) - FMean.(vowel1);
+    shifts.(ehtoi) = FAll.(vowel2) - FAll.(vowel1);
       
     %Plot the shift from vowel1 to vowel2
-    plot([Fmean.(vowel1)(1) Fmean.(vowel1)(1)+shifts.(ehtoi)(1)], ...
-        [Fmean.(vowel1)(2) Fmean.(vowel1)(2)+shifts.(ehtoi)(2)],'--','Color',colors{allperms(i,1)})
+    plot([FAll.(vowel1)(1) FAll.(vowel1)(1)+shifts.(ehtoi)(1)], ...
+        [FAll.(vowel1)(2) FAll.(vowel1)(2)+shifts.(ehtoi)(2)],'--','Color',colors{allperms(i,1)})
     
 end
 

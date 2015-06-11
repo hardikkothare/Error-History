@@ -22,9 +22,13 @@ cd(outputdir);
 
 % Experiment settings
 promptwords2use = {'bet', 'fit', 'meet', 'late','bad', 'hot', 'bought','hope', 'book', 'pool'};
-expt.baselinevowels = {'EH', 'I', 'i', 'e', 'ash', 'AH', 'open o', 'o', 'horseshoe u', 'u'};
+expt.words = promptwords2use;
+%promptwords2use = {'bet', 'fit'};
+expt.baselinevowels = {'EH', 'I', 'i', 'e', 'ash', 'AH', 'open_o', 'o', 'horseshoe_u', 'u'};
+%expt.baselinevowels = {'EH', 'I'};
 nreps = 3;
 expt.snum = subjID;
+expt.name = 'baseline';
 expt.ntrials_per_block= length(promptwords2use);
 expt.nblocks = nreps;
 feedback_level = 0;
@@ -38,7 +42,7 @@ p.fpreemph_cut_Hz = fpreemph_cut2use;
 
 %IP
 p.fusp_init.expr_dir = expt.snum;
-%p.fusp_init.expr_subdir = expt.name;
+p.fusp_init.expr_subdir = expt.name;
 p.fusp_init.nframes_per_trial = 600;
 p.fusp_init.ntrials_per_block = expt.ntrials_per_block;
 
@@ -51,7 +55,7 @@ p.fusp_ctrl.noise_scale_fact = noise_level;
 [p,ffd] = init_fusp_lite(p);
 
 % Save initial FUSP params
-savefile = fullfile(outputdir,expt.snum,'p.mat');
+savefile = fullfile(outputdir,expt.snum,expt.name,'p.mat');
 save(savefile,'p');
 
 %Experiment code
@@ -66,10 +70,11 @@ for iblock=1:expt.nblocks
     
     for itrial = 1:expt.ntrials_per_block
         fusp_advance_trial(itrial);
-        text(.5,.5,promptwords2use{itrial},'FontSize',32,'HorizontalAlignment','center')
+        text(.5,.5,promptwords2use{itrial},'FontSize',96,'HorizontalAlignment','center')
         fusp_record_start;
         fusp_record_stop;
-        pause(1);
+        pause(0.5);
+        cla
     end
      fusp_save_vec_hists(ffd);
 end
@@ -77,7 +82,7 @@ end
 close(h_fig)
 
 %Close FUSP
-fusp_lite_finish(ffdp);
+fusp_lite_finish(ffd,p);
 
 %Save parameters
 savedir = fullfile(outputdir, expt.snum);
@@ -87,5 +92,5 @@ save(fullfile(savedir, 'expt.mat'), 'expt');
       
 pause
 
-[nlpc2use, fpreemph_cut2use] = run_format_tracking_error_hist(outputdir, subjID, promptwords2use, 2);
+[nlpc2use, fpreemph_cut2use] = run_formant_tracking_error_hist(outputdir, subjID, promptwords2use, 2);
 save(fullfile(outputdir, subjID, 'ftrackparams2use.mat'),'nlpc2use','fpreemph_cut2use')

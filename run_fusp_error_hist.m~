@@ -51,27 +51,20 @@ expt.listWords = expt.words(expt.allWords);
 expt.listVowels = expt.vowels(expt.allWords);
 
 %Experiment conditions   
-expt.case=input (' Case 1 or Case 2 ? : ');
-switch (expt.case)
-    case 1
-      expt.conds = {'baseline' 'shift1' 'hold' 'baseline2' 'shift2' 'washout'};
-      expt.allConds = [ones(1,baseline_n) 2.*ones(1,shift1_n) 3.*ones(1,hold_n) 4.*ones(1,baseline2_n) 5.*ones(1,shift2_n) 6.*ones(1,washout_n)];
-      ramp_F1 = linspace(0,expt.shift.F1,shift1_n);
-      ramp_F2 = linspace(0,expt.shift.F2,shift1_n);
-      expt.condValues.F1 = [zeros(1,baseline_n) ramp_F1 repmat(expt.shift.F1,1,hold_n) zeros(1,baseline2_n) repmat(expt.shift.F1,1,shift2_n) zeros(1,washout_n)];
-      expt.condValues.F2 = [zeros(1,baseline_n) ramp_F2 repmat(expt.shift.F2,1,hold_n) zeros(1,baseline2_n) repmat(expt.shift.F2,1,shift2_n) zeros(1,washout_n)];   
-    case 2
-      expt.conds = {'baseline' 'hold' 'shift1' 'baseline2' 'shift2' 'washout'};
-      expt.allConds = [ones(1,baseline_n) 2.*ones(1,hold_n) 3.*ones(1,shift1_n)  4.*ones(1,baseline2_n) 5.*ones(1,shift2_n) 6.*ones(1,washout_n)];
-      ramp_F1 = linspace(expt.shift.F1,0,shift1_n);
-      ramp_F2 = linspace(expt.shift.F2,0,shift1_n);
-      expt.condValues.F1 = [zeros(1,baseline_n) repmat(expt.shift.F1,1,hold_n) ramp_F1  zeros(1,baseline2_n) repmat(expt.shift.F1,1,shift2_n) zeros(1,washout_n)];
-      expt.condValues.F2 = [zeros(1,baseline_n) repmat(expt.shift.F2,1,hold_n) ramp_F2  zeros(1,baseline2_n) repmat(expt.shift.F2,1,shift2_n) zeros(1,washout_n)]; 
-end
+case=input (' Case 1 or Case 2 ? : ');
+    
+    
+expt.conds = {'baseline' 'shift1' 'hold' 'baseline2' 'shift2' 'washout'};
+expt.allConds = [ones(1,baseline_n) 2.*ones(1,shift1_n) 3.*ones(1,hold_n) 4.*ones(1,baseline2_n) 5.*ones(1,shift2_n) 6.*ones(1,washout_n)];
+ramp_F1 = linspace(0,expt.shift.F1,shift1_n);
+ramp_F2 = linspace(0,expt.shift.F2,shift1_n);
+expt.condValues.F1 = [zeros(1,baseline_n) ramp_F1 repmat(expt.shift.F1,1,hold_n) zeros(1,baseline2_n) repmat(expt.shift.F1,1,shift2_n) zeros(1,washout_n)];
+expt.condValues.F2 = [zeros(1,baseline_n) ramp_F2 repmat(expt.shift.F2,1,hold_n) zeros(1,baseline2_n) repmat(expt.shift.F2,1,shift2_n) zeros(1,washout_n)];   
+    
 % Set experiment-specific FUSP parameters
 p.fusp_datadir = outputdir;
 p.yes_running_fake_fusp = 0;
-p.yes_debug = 0;
+p.yes_debug = 1;
 
 % init parameters
 p.fusp_init.expr_dir = sprintf('%s', expt.snum);

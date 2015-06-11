@@ -23,20 +23,19 @@ frame_taxis = (0:(nframes-1))*frame_size/fs;
 magspec_size = p.fusp_init.magspec_size;
 faxis = linspace(0,fs/2,magspec_size);
 
-file_type = 3;
 cd ('block0');
 vhs = [];
-vhs.inbuffer = get_vec_hist6('inbuffer', file_type);
-vhs.outbuffer = get_vec_hist6('outbuffer', file_type);
+vhs = get_vec_hist6('inbuffer', '_hist.flt');
+vhs = get_vec_hist6('outbuffer', '_hist.flt');
 if frame_size ~= vhs.inbuffer.vec_size, error('ipset:frame_size(%d) != inbuffer:frame_size(%d)', frame_size, vhs.inbuffer.vec_size); end
 if nframes ~= vhs.inbuffer.nvecs, error('ipset:nframes(%d) != inbuffer:nframes(%d)', nframes, vhs.inbuffer.nvecs); end
 
-vhs.weighted_mean_abs_inbuffer = get_vec_hist6('weighted_mean_abs_inbuffer', file_type);
-vhs.pitch = get_vec_hist6('pitch',file_type);
-vhs.pitch_strength = get_vec_hist6('pitch_strength',file_type);
-vhs.lpc_inbuf_formants_freq = get_vec_hist6( 'lpc_inbuf_formants_freq',file_type);
+vhs = get_vec_hist6('weighted_mean_abs_inbuffer', '_hist.flt');
+vhs = get_vec_hist6('pitch','_hist.flt');
+vhs = get_vec_hist6('pitch_strength','_hist.flt');
+vhs = get_vec_hist6( 'lpc_inbuf_formants_freq','_hist.flt');
 
-ntrials_show = 10;
+ntrials_show = 9;
 nformants_show = 2;
 
 formant_color = {'b','r','g'};
@@ -74,6 +73,6 @@ end
 close all
 
 cd(fullfile(outputdir,expt.snum));
-load('expt');
+load(exprparams);
 saystrings = expt.words;
 save(fullfile(outputdir,expt.snum,sprintf('vowelspace_%s',expt.snum)),'vowelspace','saystrings');
