@@ -76,20 +76,21 @@ for inlpc = 1:nnlpc
         fusp_save_vec_hists(ffd);
        
         %Plot data
+        figure(hf(inlpc));
         audio_data_vh = get_vec_hist6('inbuffer',3,iblock);
         formant_data_vh = get_vec_hist6('lpc_inbuf_formants_freq',3,iblock);
         for itrial= 1:expt.ntrials_per_block
-            if iblock == 1;
+            %if iblock == 1;
                 audio_sig = play_vec_hist6(audio_data_vh,itrial,[],0);
                 subplot(npreemph+1,expt.ntrials_per_block,itrial);
                 plot(audio_sig)
                 xlim([0 p.fusp_init.nframes_per_trial.*p.fusp_init.data_size]);
                 title(promptwords2use{itrial})
-            end
+            %end
             
             %Load formant data and plot it
             formant_sig = squeeze(formant_data_vh.data(itrial,:,:));
-            subplot(npreemph+1,expt.ntrials_per_block,iblock.*3+itrial)
+            subplot(npreemph+1,expt.ntrials_per_block,iblock.*expt.ntrials_per_block+itrial)
             plot(formant_sig)
             ylim([0 4000]);
             xlim([0 p.fusp_init.nframes_per_trial]);
@@ -101,11 +102,12 @@ for inlpc = 1:nnlpc
     end
         %Close fusp
     fusp_lite_finish(ffd,p);
-end 
+
 %Add a title to plot
 axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
 text(0.5, 1,['nlpc n = ' num2str(test_nlpc(inlpc))],'HorizontalAlignment','center','VerticalAlignment', 'top')
-  
+end 
+
 %Chose preemphasis and nlpc parameters to use 
 nlpc_choice_str = ['LPC order? [' sprintf('%d/',test_nlpc(1:(end-1))) num2str(test_nlpc(end)) ']: '];
 while 1

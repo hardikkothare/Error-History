@@ -82,7 +82,6 @@ save(savefile,'the_trial');
 load('goodfiles');
 figure_1 = figure;
 figure_2 = figure;
-figure_3 = figure;
 load('espec');
 load('the_trial');
 for i = 1: length(goodfiles)
@@ -91,10 +90,9 @@ for i = 1: length(goodfiles)
  last_index = taxis(1,length(taxis));
  trial_first_index = dsearchn(espec.frame_taxis',first_index);
  trial_last_index = dsearchn(espec.frame_taxis',last_index);
- Fin_1_dat(i) = mean(the_trial.Fin_sig(i,trial_first_index:trial_last_index,1));
- Fin_2_dat(i) = mean(the_trial.Fin_sig(i,trial_first_index:trial_last_index,2));
- Fout_1_dat(i) = mean(the_trial.Fout_sig(i,trial_first_index:trial_last_index,1));
- Fout_2_dat(i) = mean(the_trial.Fout_sig(i,trial_first_index:trial_last_index,2));
+ Fin_1_dat(i) = mean(Fin_sig(i,trial_first_index:trial_last_index,1)
+ Fin_2_dat(i) = mean(Fin_sig(i,trial_first_index:trial_last_index,2)
+ 
  F1_dat(i) = mean((dataVals(1,i).f1));
  F2_dat(i) = mean((dataVals(1,i).f2));
  
@@ -107,13 +105,7 @@ for i = 1: length(goodfiles)
   hpl = plot(goodfiles(1,i),F2_dat(1,i),[fspec.formant_colors{2} 'o']);
 
   figure(figure_2);
-  hpl = plot(goodfiles(1,i),Fin_1_dat(i),[fspec.formant_colors{1} '*']);
-  hold on
-  hpl = plot(goodfiles(1,i),Fout_1_dat(i),[fspec.formant_colors{1} 'o']);
-  
-  figure(figure_3);
-  hpl = plot(goodfiles(1,i),Fin_2_dat(i),[fspec.formant_colors{2} '*']);
-  hold on
-  hpl = plot(goodfiles(1,i),Fout_2_dat(i),[fspec.formant_colors{2} 'o']);
+  hpl = plot(goodfiles(1,i),
+
  end
  print -dpdf results.pdf

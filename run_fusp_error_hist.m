@@ -42,7 +42,7 @@ baseline2_n = 60;
 shift2_n = 50;
 washout_n = 30;
 expt.ntrials = baseline_n + shift1_n + hold_n + baseline2_n + shift2_n + washout_n;
-expt.ntrials_per_block = 8;
+expt.ntrials_per_block = 9;
 expt.nblocks = expt.ntrials ./ expt.ntrials_per_block;
 
 % Set up word list
@@ -77,6 +77,7 @@ p.yes_debug = 0;
 p.fusp_init.expr_dir = sprintf('%s', expt.snum);
 p.fusp_init.nframes_per_trial = 600;
 p_fusp_init.ntrials_per_block = expt.ntrials_per_block;
+p.fusp_init.nblocks = expt.nblocks;
 
 % Control parameters
   p.fusp_ctrl.outbuffer_scale_fact = 10;
@@ -100,11 +101,17 @@ for iblock=1:expt.nblocks
     for itrial = 1:expt.ntrials_per_block
         fusp_advance_trial(itrial);	% Tell FUSP what trial it is 
         figure(h);
-        text(.5,.5,expt.listWords{itrial},'FontSize',32,'HorizontalAlignment','center') % Display the word to be spoken
+        text(.5,.5,expt.listWords{n_trial},'FontSize',32,'HorizontalAlignment','center') % Display the word to be spoken
         send_fusp_cpset('F1shift_Hz',expt.condValues.F1(n_trial)); % Tell fusp to shift F1
         send_fusp_cpset('F2shift_Hz',expt.condValues.F2(n_trial)); % Tell fusp to shift F2
+        rem = mod (n_trial,5);
+        if rem == 0
+            send_fusp_cpset('noise_scale_fact', 2000);
+                
+        end
         fusp_record_start;          % Record for nframes_per_trial (init parameter, set above)
         fusp_record_stop;           % Stop recording
+        send_fusp_cpset('noise_scale_fact', 0);
         pause(0.5);
         cla
         pause(0.5);
