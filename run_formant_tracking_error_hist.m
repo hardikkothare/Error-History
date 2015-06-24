@@ -38,7 +38,7 @@ for inlpc = 1:nnlpc
     p.dir4fake_audio = datadir;
     p.startdir = pwd;
     p.ichan4inbuffer = 1;
-   % p.block0dir = [outputdir '/' subjID '/baseline/block0'];
+    p.block0dir = [outputdir '/' subjID '/baseline/block0'];
     
     %IP
     p.fusp_init.expr_dir = expt.snum;
@@ -56,12 +56,12 @@ for inlpc = 1:nnlpc
     %Start FUSP
     [p,ffd] = init_fusp_lite(p);
     
-    
+    cd(p.block0dir);
     %Experiment code
-    for iblock = 1:npreemph 
-        iblock2load = fusp_advance_block(p,iblock);
-        p.block0dir = [outputdir '/' subjID '/' 'baseline' '/' iblock2load];
-        p.fpreemph_cut_Hz = test_fpreemph_cut(iblock);
+    for ipreemph = 1:npreemph 
+%         iblock2load = fusp_advance_block(p,iblock);
+        p.block0dir = [outputdir '/' subjID '/' 'baseline' '/' 'block0'];
+        p.fpreemph_cut_Hz = test_fpreemph_cut(ipreemph);
         write_filtcoffs(p);
         
         
@@ -77,8 +77,8 @@ for inlpc = 1:nnlpc
        
         %Plot data
         figure(hf(inlpc));
-        audio_data_vh = get_vec_hist6('inbuffer',3,iblock);
-        formant_data_vh = get_vec_hist6('lpc_inbuf_formants_freq',3,iblock);
+        audio_data_vh = get_vec_hist6('inbuffer',3);
+        formant_data_vh = get_vec_hist6('lpc_inbuf_formants_freq',3);
         for itrial= 1:expt.ntrials_per_block
             %if iblock == 1;
                 audio_sig = play_vec_hist6(audio_data_vh,itrial,[],0);
@@ -90,13 +90,13 @@ for inlpc = 1:nnlpc
             
             %Load formant data and plot it
             formant_sig = squeeze(formant_data_vh.data(itrial,:,:));
-            subplot(npreemph+1,expt.ntrials_per_block,iblock.*expt.ntrials_per_block+itrial)
+            subplot(npreemph+1,expt.ntrials_per_block,ipreemph.*expt.ntrials_per_block+itrial)
             plot(formant_sig)
             ylim([0 4000]);
             xlim([0 p.fusp_init.nframes_per_trial]);
             %Plot label if subplot is on left of figure
             if itrial == 1
-                ylabel(num2str(test_fpreemph_cut(iblock)))
+                ylabel(num2str(test_fpreemph_cut(ipreemph)))
             end
         end
     end

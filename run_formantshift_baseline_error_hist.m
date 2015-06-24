@@ -21,7 +21,7 @@ end
 cd(outputdir);
 
 % Experiment settings
-promptwords2use = {'bet', 'fit', 'meet', 'late','bad', 'hot', 'bought','hope', 'book', 'pool'};
+promptwords2use = {'bet', 'fit', 'meet', 'late','bad', 'car', 'bought','hope', 'book', 'pool'};
 expt.words = promptwords2use;
 %promptwords2use = {'bet', 'fit'};
 expt.baselinevowels = {'EH', 'I', 'i', 'e', 'ash', 'AH', 'open_o', 'o', 'horseshoe_u', 'u'};

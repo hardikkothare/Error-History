@@ -24,7 +24,13 @@ magspec_size = p.fusp_init.magspec_size;
 faxis = linspace(0,fs/2,magspec_size);
 
 file_type = 3;
-cd ('block0');
+for iblock = 1:3
+   blockdir = sprintf('block%d',iblock-1);
+   fprintf('...getting data from %s...\n',blockdir);
+   curdir = cd;
+   cd(blockdir);
+
+
 vhs = [];
 vhs.inbuffer = get_vec_hist6('inbuffer', file_type);
 vhs.outbuffer = get_vec_hist6('outbuffer', file_type);
@@ -37,7 +43,7 @@ vhs.pitch_strength = get_vec_hist6('pitch_strength',file_type);
 vhs.lpc_inbuf_formants_freq = get_vec_hist6( 'lpc_inbuf_formants_freq',file_type);
 
 ntrials_show = 10;
-nformants_show = 2;
+nformants_show = 3;
 
 formant_color = {'b','r','g'};
 hf = figure;
@@ -59,7 +65,7 @@ for itrial_show = 1:ntrials_show
       yes_bad_trial = 0;
     end
     if yes_bad_trial
-      vowelspace(itrial_show,:) = NaN*ones(1,nformants_show);
+      vowelspace_all(itrial_show,:) = NaN*ones(1,nformants_show);
     else
     for i = 1:nspl
       axes(spl_hax(i)); hl = vline(itime_show,'r'); set(hl,'LineWidth',3); move2back([],hl);
@@ -67,12 +73,14 @@ for itrial_show = 1:ntrials_show
     iframe_show = dsearchn(frame_taxis',itime_show);
     fprintf('%.0f ',vhs.lpc_inbuf_formants_freq.data(itrial_show,iframe_show,1:nformants_show));
     fprintf('\n');
-    vowelspace(itrial_show,:) = vhs.lpc_inbuf_formants_freq.data(itrial_show,iframe_show,1:nformants_show);
-  end
+    vowelspace_all(itrial_show,:,iblock) = vhs.lpc_inbuf_formants_freq.data(itrial_show,iframe_show,1:nformants_show);
+    end
+  cd(curdir);
 end
-
+end
 close all
 
+vowelspace = mean(vowelspace_all,3);
 cd(fullfile(outputdir,expt.snum));
 load('expt');
 saystrings = expt.words;

@@ -58,7 +58,7 @@ for i=1:size(allperms,1)
     ehtoi = sprintf('%s2%s', vowel1, vowel2);
     shifts.(ehtoi) = FAll.(vowel2) - FAll.(vowel1);
       
-    %Plot the shift from vowel1 to vowel2
+%    Plot the shift from vowel1 to vowel2
     plot([FAll.(vowel1)(1) FAll.(vowel1)(1)+shifts.(ehtoi)(1)], ...
         [FAll.(vowel1)(2) FAll.(vowel1)(2)+shifts.(ehtoi)(2)],'--','Color',colors{allperms(i,1)})
     
