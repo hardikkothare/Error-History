@@ -86,7 +86,7 @@ save(savefile,'espec');
 
 
 load('goodfiles');
-figure_1 = figure;
+% figure_1 = figure;
 % figure_2 = figure;
 % figure_3 = figure;
 load('espec');
@@ -94,8 +94,9 @@ load('espec');
 
 load('expt');
 load('dataVals');
+
 for i = 1: length(goodfiles)
-%  taxis = dataVals(1,i).ftrack_taxis';   
+%   taxis = dataVals(1,i).ftrack_taxis';   
 %  first_index = taxis(1,1);
 %  last_index = taxis(1,length(taxis));
 %  trial_first_index = dsearchn(espec.frame_taxis',first_index);
@@ -106,6 +107,9 @@ for i = 1: length(goodfiles)
 %  Fout_2_dat(i) = mean(the_trial.Fout_sig(i,trial_first_index:trial_last_index,2));
  F1_dat(i) = mean((dataVals(1,i).f1));
  F2_dat(i) = mean((dataVals(1,i).f2));
+
+ 
+ 
  
 
   ifmt = fspec.nformants2plot;
@@ -126,6 +130,11 @@ for i = 1: length(goodfiles)
   hpl = plot(goodfiles(1,i),F2_dat(1,i),[fspec.formant_colors{2} 'o']);
   end
   
+%    figure(figure_3);
+%    hpl = plot(goodfiles(1,i),Fin_1_dat(i),[fspec.formant_colors{1} '*']);
+%    hold on
+%    hpl = plot(goodfiles(1,i),Fin_2_dat(i),[fspec.formant_colors{2} 'o'])
+  
 %   figure(figure_2);
 %   hpl = plot(goodfiles(1,i),Fin_1_dat(i),[fspec.formant_colors{1} '*']);
 %   hold on
@@ -135,5 +144,46 @@ for i = 1: length(goodfiles)
 %   hpl = plot(goodfiles(1,i),Fin_2_dat(i),[fspec.formant_colors{2} '*']);
 %   hold on
 %   hpl = plot(goodfiles(1,i),Fout_2_dat(i),[fspec.formant_colors{2} 'o']);
- end
+end
+F1_baseline = mean (F1_dat(1:30));
+F2_baseline = mean (F2_dat(1:30));
+for i = 1:length(goodfiles)
+ formant_comp.i = [F1_dat(1,i)-F1_baseline F2_dat(1,i)-F2_baseline];
+ formant_shift = [expt.shift.F1 expt.shift.F2];
+ projection.i = dot(formant_comp.i,formant_shift)/norm(formant_shift);
+ comp_ratio.i = ((projection.i))/norm(formant_shift);
+ figure(figure_2)
+ rem = mod(goodfiles(1,i),5);
+  if rem == 0
+      hpl = plot(goodfiles(1,i),comp_ratio.i,['g*']);
+  else
+  hpl = plot(goodfiles(1,i), comp_ratio.i, 'r*');
+  end
+ hold on
+ ratio(1,goodfiles(1,i)) = comp_ratio.i;
+ 
+end
+triangle_fig = figure;
+plot (F1_baseline,F2_baseline, '*k');
+hold on
+plot(F1_baseline+expt.shift.F1, F2_baseline+expt.shift.F2, '*r');
+hold on
+plot(mean(F1_dat(1,101:130)), mean(F2_dat(1,101:130)), '*b');
+
+for counter= 1:270
+    if ~ismember(counter,goodfiles)
+        new_comp_ratio(1,counter) = 0;
+    else
+        new_comp_ratio(1,counter) = ratio(1,counter);
+    end
+end
+expt.new_comp_ratio = new_comp_ratio;
+savedir = fullfile(outputdir, expt.snum, expt.case);
+save(fullfile(savedir, 'expt.mat'), 'expt');
+for median_counter=1:265
+    median_value(1,median_counter+2) = median(new_comp_ratio(median_counter:median_counter+4));
+    figure(figure_3);
+    hpl = plot(median_counter+2,median_value(1,median_counter),'b*');
+    hold on
+end
  print -dpdf results.pdf

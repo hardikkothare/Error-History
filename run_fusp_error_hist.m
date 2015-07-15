@@ -118,11 +118,13 @@ for iblock=1:expt.nblocks
         rem = mod (n_trial,5);
         if rem == 0
             send_fusp_cpset('noise_scale_fact', 2000);
+            send_fusp_cpset('outbuffer_scale_fact' , 0);
                 
         end
         fusp_record_start;          % Record for nframes_per_trial (init parameter, set above)
         fusp_record_stop;           % Stop recording
         send_fusp_cpset('noise_scale_fact', 0);
+        send_fusp_cpset('outbuffer_scale_fact',10);
         pause(0.5);
         cla
         pause(0.5);
